@@ -15,3 +15,9 @@ Back-end?
   - Nouns
   - Joining words
 
+### Joining words
+`IS`, `AND`
+
+### Mechanics
+`NOUN` (`AND` `NOUN`) `IS` `AJECTIVE` (`AND` `ADJECTIVE`)
+`NOUN` (`AND` `NOUN`) `IS` `NOUN`
