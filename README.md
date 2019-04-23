@@ -22,3 +22,5 @@ Back-end?
 `NOUN` (`AND` `NOUN`) `IS` `AJECTIVE` (`AND` `ADJECTIVE`)
 
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
+
+`NOUN` (`AND` `NOUN`) `HAS` `NOUN`
