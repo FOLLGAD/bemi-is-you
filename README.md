@@ -2,12 +2,12 @@
 
 ## Technologies
 
-Frontend:
+### Frontend
 - Javascript & HTML
 - [pixi.js](https://github.com/pixijs/pixi.js) graphics library
-- Websocket API
+- Websocket js-API
 
-Backend
+### Backend
 - Golang webserver
 - Förmedla karaktärers positioner samt level-info över [Websockets](https://github.com/gorilla/websocket)
 
@@ -26,3 +26,4 @@ Backend
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
 
 `NOUN` (`AND` `NOUN`) `HAS` `NOUN`
+
