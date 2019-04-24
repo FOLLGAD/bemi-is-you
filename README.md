@@ -25,5 +25,3 @@
 
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
 
-`NOUN` (`AND` `NOUN`) `HAS` `NOUN`
-
