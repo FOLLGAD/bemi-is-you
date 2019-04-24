@@ -2,23 +2,25 @@
 
 ## Technologies
 
-Front-end:
+Frontend:
 - Javascript & HTML
-- [pixi.js](https://github.com/pixijs/pixi.js)
+- [pixi.js](https://github.com/pixijs/pixi.js) graphics library
+- Websocket API
 
-Back-end?
-- Golang
+Backend
+- Golang webserver
+- Förmedla karaktärers positioner samt level-info över [Websockets](https://github.com/gorilla/websocket)
 
 ## Game mechanics
 - Words
-  - Adjectives
-  - Nouns
-  - Joining words
+	- Adjectives
+	- Nouns
+	- Joining words
 
 ### Joining words
 `IS`, `AND`
 
-### Mechanics
+### Sentence building
 `NOUN` (`AND` `NOUN`) `IS` `AJECTIVE` (`AND` `ADJECTIVE`)
 
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
