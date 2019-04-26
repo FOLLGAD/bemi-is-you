@@ -21,7 +21,7 @@
 `IS`, `AND`
 
 ### Sentence building
-`NOUN` (`AND` `NOUN`) `IS` `AJECTIVE` (`AND` `ADJECTIVE`)
+`NOUN` (`AND` `NOUN`) `IS` `ADJECTIVE` (`AND` `ADJECTIVE`)
 
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
 

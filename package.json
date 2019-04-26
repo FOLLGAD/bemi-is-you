@@ -1,0 +1,31 @@
+{
+  "name": "bemi-is-you",
+  "version": "1.0.0",
+  "description": "## Technologies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FOLLGAD/bemi-is-you.git"
+  },
+  "keywords": [
+    "bemi",
+    "is",
+    "you"
+  ],
+  "author": "samuel and emil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FOLLGAD/bemi-is-you/issues"
+  },
+  "homepage": "https://github.com/FOLLGAD/bemi-is-you#readme",
+  "dependencies": {
+    "pixi.js": "^4.8.7",
+    "webpack": "^4.30.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.1"
+  }
+}
