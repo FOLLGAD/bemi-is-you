@@ -25,3 +25,10 @@
 
 `NOUN` (`AND` `NOUN`) `IS` `NOUN`
 
+## Controls
+
+WASD - Movement
+
+Z - Undo
+
+R - Restart
