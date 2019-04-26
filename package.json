@@ -1,10 +1,11 @@
 {
   "name": "bemi-is-you",
   "version": "1.0.0",
-  "description": "## Technologies",
+  "description": "Bemi is you",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "http-server .",
+    "dev": "webpack & npm run serve"
   },
   "repository": {
     "type": "git",
