@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/FOLLGAD/bemi-is-you#readme",
   "dependencies": {
+    "http-server": "^0.11.1",
     "pixi.js": "^4.8.7",
     "webpack": "^4.30.0"
   },
