@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/game.js":
+/*!************************!*\
+  !*** ./client/game.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"default\", function() { return Game; });\n/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ \"./node_modules/pixi.js/lib/index.js\");\n/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pixi_js__WEBPACK_IMPORTED_MODULE_0__);\n\n\nclass Game {\n\t// app = null;\n\n\tconstructor() {\n\t\tthis.app = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Application\"]({\n\t\t\twidth: 1024, height: 800, resolution: window.devicePixelRatio || 1, forceCanvas: true, backgroundColor: 0xeeeeee,\n\t\t})\n\n\t\tdocument.body.appendChild(this.app.view)\n\t}\n\tstart() {\n\t\tlet app = this.app\n\n\t\tconst background = pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Texture\"].from('../textures/background.png')\n\t\t// background.width = app.view.width\n\t\t// background.height = app.view.height\n\t\t// Create the background\n\n\t\tlet bgElement = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Sprite\"].from(background)\n\t\tbgElement.width = app.view.width\n\t\tbgElement.height = app.view.height\n\t\tapp.stage.addChild(bgElement)\n\n\t\tconst container = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Container\"]()\n\n\t\tapp.stage.addChild(container)\n\n\t\tconst char = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Graphics\"]()\n\t\tchar.beginFill(0x0011ee)\n\t\tchar.drawRect(0, 0, 200, 200);\n\t\t// char.anchor.set(0.5)\n\t\tchar.x = 20\n\t\tchar.y = 20\n\t\tcontainer.addChild(char)\n\n\t\t// Move container to the center\n\t\tcontainer.x = app.screen.width / 2\n\t\tcontainer.y = app.screen.height / 2\n\n\t\t// Center char sprite in local container coordinates\n\t\tcontainer.pivot.x = container.width / 2\n\t\tcontainer.pivot.y = container.height / 2\n\t}\n\tlisten(elem) {\n\t\telem.addEventListener('keydown', this.handleKeyDown)\n\t}\n\thandleKeyDown(event) {\n\t\tlet { code, repeat } = event\n\n\t\tif (!repeat) {\n\t\t\tconsole.log(code)\n\t\t}\n\t}\n}\n\n//# sourceURL=webpack:///./client/game.js?");
+
+/***/ }),
+
 /***/ "./client/main.js":
 /*!************************!*\
   !*** ./client/main.js ***!
@@ -94,7 +106,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ \"./node_modules/pixi.js/lib/index.js\");\n/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(pixi_js__WEBPACK_IMPORTED_MODULE_0__);\n\n\nwindow.onload = main\n\nfunction main() {\n\tconst app = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Application\"]({\n\t\twidth: 1024, height: 1024, resolution: window.devicePixelRatio || 1, forceCanvas: true, backgroundColor: 0xeeeeee,\n\t})\n\n\tdocument.body.appendChild(app.view)\n\n\tconst background = pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Texture\"].from('../textures/background.png')\n\t// background.width = app.view.width\n\t// background.height = app.view.height\n\t// Create the background \n\tlet yah = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Sprite\"].from(background);\n\tyah.width = app.view.width\n\tyah.height = app.view.height\n\tapp.stage.addChild(yah);\n\n\tconst container = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Container\"]()\n\n\tapp.stage.addChild(container)\n\n\tconst char = new pixi_js__WEBPACK_IMPORTED_MODULE_0__[\"Graphics\"]()\n\tchar.beginFill(0x0011ee)\n\tchar.drawRect(0, 0, 200, 200);\n\t// char.anchor.set(0.5)\n\tchar.x = 20\n\tchar.y = 20\n\tcontainer.addChild(char)\n\n\t// Move container to the center\n\tcontainer.x = app.screen.width / 2\n\tcontainer.y = app.screen.height / 2\n\n\t// Center char sprite in local container coordinates\n\tcontainer.pivot.x = container.width / 2\n\tcontainer.pivot.y = container.height / 2\n}\n\n//# sourceURL=webpack:///./client/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./game */ \"./client/game.js\");\n\n\nwindow.onload = main\n\nconst TILE_SIZE = 16 // 16x16 pixels represents a tile\n\nfunction main() {\n\n\tlet game = new _game__WEBPACK_IMPORTED_MODULE_0__[\"default\"]()\n\n\tgame.listen(window) // Initiate listeners on the 'window' object\n\tgame.start()\n}\n\n//# sourceURL=webpack:///./client/main.js?");
 
 /***/ }),
 
