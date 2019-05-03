@@ -37,3 +37,7 @@ WASD - Movement
 Z - Undo
 
 R - Restart
+
+## Network package
+
+The golang server sends
