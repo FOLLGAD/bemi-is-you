@@ -13,15 +13,15 @@ export default class Game {
 	constructor() {
 		PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 		this.app = new PIXI.Application({
-			width: TILE_SIZE * 16,
+			width: TILE_SIZE * 18,
 			height: TILE_SIZE * 12,
 			resolution: window.devicePixelRatio || 1,
 			backgroundColor: 0xeeeeee,
 		})
-
-		document.body.appendChild(this.app.view)
 	}
 	start() {
+		document.body.appendChild(this.app.view)
+
 		this.chars = new Map()
 
 		let app = this.app
@@ -42,6 +42,10 @@ export default class Game {
 		container.y = 0
 
 		app.stage.addChild(container)
+
+		this.level.objects.forEach(ob => {
+			this.setChar(ob)
+		})
 	}
 	setChar(char) {
 		const texture = PIXI.Texture.from('../textures/' + this.getTexture(char))
@@ -74,10 +78,6 @@ export default class Game {
 	}
 	setLevel(data) {
 		this.level = new Level(data)
-
-		this.level.objects.forEach(ob => {
-			this.setChar(ob)
-		})
 	}
 	listen(elem, func) {
 		elem.addEventListener('keydown', func)

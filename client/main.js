@@ -15,6 +15,7 @@ function main() {
 		switch (data.msgType) {
 			case 0: // Level info
 				game.setLevel(data.data)
+				game.start()
 				break
 			case 1: // Delta info
 				game.deltaTick(data.data)
@@ -55,5 +56,4 @@ function main() {
 			data: data,
 		}))
 	}) // Initiate listeners on the 'window' object
-	game.start()
 }
