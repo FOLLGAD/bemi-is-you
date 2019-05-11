@@ -163,8 +163,13 @@ func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meani
 			Id:    objectToMove.Id,
 			Pos:   delta,
 		}
-		*tick = append(*tick, change)
-		game.DoChange(change)
+
+		if !objectToMove.CheckOutOfBounds(game, delta) {
+			*tick = append(*tick, change)
+			game.DoChange(change)
+		} else {
+			success = false
+		}
 	}
 
 	return success
@@ -199,6 +204,13 @@ func (game *Game) DoChange(change Change) {
 	}
 }
 
+func (obj Object) CheckOutOfBounds(game *Game, delta Pos) bool {
+	newPos := obj.Pos.Add(delta)
+	if newPos.X >= game.level.Width || newPos.X < 0 || newPos.Y >= game.level.Height || newPos.Y < 0 {
+		return true
+	}
+	return false
+}
 func (game *Game) EmitDelta(tick Tick) {
 	game.updateChan <- tick
 }

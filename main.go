@@ -45,8 +45,8 @@ func addObject(pos Pos, kind Kind, item string) *Object {
 func main() {
 	// LEVEL
 	var firstLevel = Level{}
-	firstLevel.Height = 20
-	firstLevel.Width = 25
+	firstLevel.Width = 18
+	firstLevel.Height = 12
 
 	firstLevel.Objects = []*Object{
 		addObject(Pos{10, 10}, Char, "bemi"),
