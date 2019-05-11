@@ -4,12 +4,20 @@ import (
 	"errors"
 )
 
-type Meaning struct {
-	affected []string // Item
-	modifier []string // The adjectives
+type Meanings map[string]map[string]bool
+
+func (union *Meanings) AddMeanings(meanings Meanings) {
+	for affected := range meanings {
+		for modifier := range meanings[affected] {
+			if (*union)[affected] == nil {
+				(*union)[affected] = map[string]bool{}
+			}
+			(*union)[affected][modifier] = true
+		}
+	}
 }
 
-func findSentences(objects ObjectList) []Meaning {
+func findSentences(objects ObjectList) Meanings {
 	isWords := ObjectList{}
 	for _, e := range objects {
 		if e.Kind == Conj && e.Item == "is" {
@@ -24,7 +32,7 @@ func findSentences(objects ObjectList) []Meaning {
 		}
 		return &Object{}, errors.New("Not found")
 	}
-	meanings := []Meaning{}
+	meanings := Meanings{}
 
 	for _, e := range isWords {
 		// traverse X-range
@@ -41,7 +49,7 @@ func findSentences(objects ObjectList) []Meaning {
 			objBack, errBack := findWordByPos(posBack)
 			if errForw == nil && errBack == nil && objBack.Kind == Noun && (objForw.Kind == Noun || objForw.Kind == Adj) {
 				m := parseSentence(ObjectList{objBack, e, objForw})
-				meanings = append(meanings, m)
+				meanings.AddMeanings(m)
 			}
 		}
 
@@ -59,7 +67,7 @@ func findSentences(objects ObjectList) []Meaning {
 			objBack, errBack := findWordByPos(posBack)
 			if errForw == nil && errBack == nil && objBack.Kind == Noun && (objForw.Kind == Noun || objForw.Kind == Adj) {
 				m := parseSentence(ObjectList{objBack, e, objForw})
-				meanings = append(meanings, m)
+				meanings.AddMeanings(m)
 			}
 		}
 	}
@@ -67,9 +75,10 @@ func findSentences(objects ObjectList) []Meaning {
 }
 
 // Parse a correct sentence
-func parseSentence(words ObjectList) Meaning {
+func parseSentence(words ObjectList) Meanings {
+	meaning := Meanings{}
+
 	affected := []string{}
-	modifier := []string{}
 
 	hasEncounteredIs := false
 	for i, word := range words {
@@ -80,15 +89,17 @@ func parseSentence(words ObjectList) Meaning {
 
 		if i%2 == 0 { // Is not a conjunction
 			if hasEncounteredIs {
-				modifier = append(modifier, word.Item)
+				for _, e := range affected {
+					if meaning[e] == nil {
+						meaning[e] = map[string]bool{}
+					}
+					meaning[e][word.Item] = true
+				}
 			} else {
 				affected = append(affected, word.Item)
 			}
 		}
 	}
 
-	return Meaning{
-		affected,
-		modifier,
-	}
+	return meaning
 }
