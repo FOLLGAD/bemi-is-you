@@ -1,7 +1,7 @@
 {
-  "name": "bemi-is-you",
+  "name": "bemi-and-sami",
   "version": "1.0.0",
-  "description": "Bemi is you",
+  "description": "A puzzle game based on the game \"Baba is you\"",
   "main": "index.js",
   "scripts": {
     "serve": "http-server .",
@@ -13,8 +13,8 @@
   },
   "keywords": [
     "bemi",
-    "is",
-    "you"
+    "and",
+    "sami"
   ],
   "author": "Emil Ahlbäck <eahlback@kth.se>, Samuel Söderberg <sasoder@kth.se>",
   "license": "ISC",
