@@ -43,21 +43,25 @@ export default class Game {
 
 		app.stage.addChild(container)
 	}
-	updateChar(characterId, x, y) {
-		let char = this.chars.get(characterId)
+	setChar(char) {
+		const texture = PIXI.Texture.from('../textures/' + this.getTexture(char))
+		const pixiChar = new PIXI.Sprite(texture)
+		const scaleY = 4
+		const scaleX = scaleY
+		pixiChar.scale.set(scaleX, scaleY)
+		pixiChar.x = TILE_SIZE * char.pos.x
+		pixiChar.y = TILE_SIZE * char.pos.y
+		this.container.addChild(pixiChar)
+		this.chars.set(char.id, pixiChar)
+	}
+	updateChar(charObject) {
+		let char = this.chars.get(charObject.id)
 
 		if (char) {
-			char.x = TILE_SIZE * x
-			char.y = TILE_SIZE * y
-		} else {
-			const char = new PIXI.Graphics()
-			char.beginFill(0x0011ee) // Fill colour
-			char.drawRect(0, 0, TILE_SIZE, TILE_SIZE) // Size
-			char.x = TILE_SIZE * x
-			char.y = TILE_SIZE * y
-			this.container.addChild(char)
-			this.chars.set(characterId, char)
+			char.x = TILE_SIZE * charObject.pos.x
+			char.y = TILE_SIZE * charObject.pos.y
 		}
+	}
 	getTexture(object) {
 		if (object.kind == 0) return object.item + "_block.png"
 		else return object.item + ".png"
@@ -72,23 +76,25 @@ export default class Game {
 		this.level = new Level(data)
 
 		this.level.objects.forEach(ob => {
-			this.updateChar(ob.id, ob.pos.x, ob.pos.y)
+			this.setChar(ob)
 		})
 	}
 	listen(elem, func) {
 		elem.addEventListener('keydown', func)
 	}
 	deltaTick(tick) {
-		tick.forEach(change => {
-			let { event, id, pos } = change
+		if (tick != null) {
+			tick.forEach(change => {
+				let { event, id, pos } = change
 
-			switch (event) {
-				case 0: // Move
-					let char = this.level.objects.find(ob => ob.id == id)
-					char.pos.x += pos.x
-					char.pos.y += pos.y
-					this.updateChar(char.id, char.pos.x, char.pos.y)
-			}
-		})
+				switch (event) {
+					case MOVE: // Move
+						let char = this.level.objects.find(ob => ob.id == id)
+						char.pos.x += pos.x
+						char.pos.y += pos.y
+						this.updateChar(char)
+				}
+			})
+		}
 	}
 }
