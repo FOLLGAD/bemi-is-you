@@ -11,12 +11,15 @@ const MOVE = 0,
 
 export default class Game {
 	constructor() {
+		PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST
 		this.app = new PIXI.Application({
-			width: TILE_SIZE * 16, height: TILE_SIZE * 12, resolution: window.devicePixelRatio || 1, forceCanvas: true, backgroundColor: 0xeeeeee,
+			width: TILE_SIZE * 16,
+			height: TILE_SIZE * 12,
+			resolution: window.devicePixelRatio || 1,
+			backgroundColor: 0xeeeeee,
 		})
 
 		document.body.appendChild(this.app.view)
-
 	}
 	start() {
 		this.chars = new Map()
@@ -55,6 +58,9 @@ export default class Game {
 			this.container.addChild(char)
 			this.chars.set(characterId, char)
 		}
+	getTexture(object) {
+		if (object.kind == 0) return object.item + "_block.png"
+		else return object.item + ".png"
 	}
 	removeChar(characterId) {
 		let index = this.chars.findIndex(ch => ch.id == characterId)
