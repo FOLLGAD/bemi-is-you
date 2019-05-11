@@ -9,16 +9,16 @@ type Meaning struct {
 	modifier []string // The adjectives
 }
 
-func findSentences(words ObjectList) []Meaning {
+func findSentences(objects ObjectList) []Meaning {
 	isWords := ObjectList{}
-	for _, e := range words {
+	for _, e := range objects {
 		if e.Kind == Conj && e.Item == "is" {
 			isWords = append(isWords, e)
 		}
 	}
 	findWordByPos := func(pos Pos) (*Object, error) {
-		for _, e := range words {
-			if e.Pos == pos {
+		for _, e := range objects {
+			if e.Pos == pos && e.Kind != Char {
 				return e, nil
 			}
 		}
