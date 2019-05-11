@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"strconv"
+)
 
 type Kind byte
 
@@ -67,10 +69,10 @@ type Game struct {
 	updateChan  chan<- Tick
 }
 
-func (objs ObjectList) findByItem(item string) ObjectList {
+func (objs ObjectList) findCharByItem(item string) ObjectList {
 	outs := []*Object{}
 	for _, e := range objs {
-		if e.Item == item {
+		if e.Kind == Char && e.Item == item {
 			outs = append(outs, e)
 		}
 	}
@@ -78,46 +80,51 @@ func (objs ObjectList) findByItem(item string) ObjectList {
 }
 
 func (game *Game) ReceiveData(msg ReceivedMessage) {
-	fmt.Println(msg)
+	meanings := findSentences(game.objectState)
 
-	findSentences(game.objectState)
+	var tick Tick
+	var delta Pos
 
 	switch msg.Data {
 	case "up":
-		id := game.objectState[0].Id
-		moveChange := Change{
-			Event: Move,
-			Id:    id,
-			Pos:   Pos{0, -1},
-		}
-		game.AddTick(Tick{moveChange})
+		delta = Pos{0, -1}
+		fallthrough
 	case "down":
-		id := game.objectState[0].Id
-		moveChange := Change{
-			Event: Move,
-			Id:    id,
-			Pos:   Pos{0, 1},
+		if msg.Data == "down" {
+			delta = Pos{0, 1}
 		}
-		game.AddTick(Tick{moveChange})
+		fallthrough
 	case "right":
-		id := game.objectState[0].Id
-		moveChange := Change{
-			Event: Move,
-			Id:    id,
-			Pos:   Pos{1, 0},
+		if msg.Data == "right" {
+			delta = Pos{1, 0}
 		}
-		game.AddTick(Tick{moveChange})
+		fallthrough
 	case "left":
-		id := game.objectState[0].Id
-		moveChange := Change{
-			Event: Move,
-			Id:    id,
-			Pos:   Pos{-1, 0},
+		if msg.Data == "left" {
+			delta = Pos{-1, 0}
 		}
-		game.AddTick(Tick{moveChange})
-	}
-	for _, e := range game.objectState {
-		fmt.Println(*e)
+		for _, e := range meanings {
+			for _, mod := range e.modifier {
+				if mod == strconv.Itoa(msg.player) {
+					// move all e.affected's
+					for _, toMoveItem := range e.affected {
+						// toMoveItem is an "Item"
+						objects := game.objectState.findCharByItem(toMoveItem)
+						for _, toMoveObject := range objects {
+							// Add a new tick to move!
+							tick = append(tick, Change{
+								Event: Move,
+								Id:    toMoveObject.Id,
+								Pos:   delta,
+							})
+						}
+					}
+				}
+			}
+		}
+
+		game.AddTick(tick)
+		break
 	}
 }
 
