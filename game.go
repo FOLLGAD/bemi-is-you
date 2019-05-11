@@ -17,6 +17,13 @@ type Pos struct {
 	Y int `json:"y"`
 }
 
+func (pos Pos) Add(addPos Pos) Pos {
+	return Pos{
+		pos.X + addPos.X,
+		pos.Y + addPos.Y,
+	}
+}
+
 type Id int // Randomized id?
 
 type Object struct {
@@ -51,14 +58,30 @@ type Timeline []Tick
 
 // Game struct
 
+type ObjectList []*Object
+
 type Game struct {
 	level       Level
-	objectState []*Object
+	objectState ObjectList
 	timeline    Timeline
 	updateChan  chan<- Tick
 }
 
+func (objs ObjectList) findByItem(item string) ObjectList {
+	outs := []*Object{}
+	for _, e := range objs {
+		if e.Item == item {
+			outs = append(outs, e)
+		}
+	}
+	return outs
+}
+
 func (game *Game) ReceiveData(msg ReceivedMessage) {
+	fmt.Println(msg)
+
+	findSentences(game.objectState)
+
 	switch msg.Data {
 	case "up":
 		id := game.objectState[0].Id
@@ -104,7 +127,7 @@ func (game *Game) FindId(id Id) *Object {
 			return e
 		}
 	}
-	return &Object{} // Doesn't happen
+	return &Object{} // Shouldn't happen
 }
 
 func (game *Game) DoChange(change Change) {
@@ -113,6 +136,7 @@ func (game *Game) DoChange(change Change) {
 		obj := game.FindId(change.Id)
 		obj.Pos.X += change.Pos.X
 		obj.Pos.Y += change.Pos.Y
+		break
 	}
 }
 
