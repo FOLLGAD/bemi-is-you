@@ -1,6 +1,7 @@
 package main
 
 import (
+	"sort"
 	"strconv"
 )
 
@@ -69,7 +70,7 @@ type Game struct {
 	updateChan  chan<- Tick
 }
 
-func (objs ObjectList) findCharByItem(item string) ObjectList {
+func (objs ObjectList) FindCharByItem(item string) ObjectList {
 	outs := []*Object{}
 	for _, e := range objs {
 		if e.Kind == Char && e.Item == item {
@@ -103,21 +104,14 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 		if msg.Data == "left" {
 			delta = Pos{-1, 0}
 		}
-		for _, e := range meanings {
-			for _, mod := range e.modifier {
-				if mod == strconv.Itoa(msg.player) {
-					// move all e.affected's
-					for _, toMoveItem := range e.affected {
-						// toMoveItem is an "Item"
-						objects := game.objectState.findCharByItem(toMoveItem)
-						for _, toMoveObject := range objects {
-							// Add a new tick to move!
-							tick = append(tick, Change{
-								Event: Move,
-								Id:    toMoveObject.Id,
-								Pos:   delta,
-							})
-						}
+		for affectedsKey := range meanings {
+			for modifiersKey := range meanings[affectedsKey] {
+				if modifiersKey == strconv.Itoa(msg.player) {
+					objects := game.objectState.FindCharByItem(affectedsKey)
+					// sort tiles based on delta
+					sortedObjects := objects.SortTiles(delta)
+					for _, toMoveObject := range sortedObjects {
+						game.CheckCollision(delta, toMoveObject, meanings, &tick)
 					}
 				}
 			}
@@ -126,6 +120,64 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 		game.AddTick(tick)
 		break
 	}
+}
+
+// Sort according to move direction
+func (objects ObjectList) SortTiles(delta Pos) ObjectList {
+	// 1, 0 = start looking from right
+	// -1, 0 = start looking from left
+	// 0, 1 = start looking from down
+	// 0, -1 = start looking from up
+	if delta.X == 1 {
+		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.X > objects[j].Pos.X })
+	} else if delta.X == -1 {
+		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.X < objects[j].Pos.X })
+	} else if delta.Y == 1 {
+		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.Y > objects[j].Pos.Y })
+	} else if delta.X == -1 {
+		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.Y < objects[j].Pos.Y })
+	}
+	return objects
+}
+
+func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meanings, tick *Tick) (success bool) {
+	success = true
+
+	for _, atPos := range game.objectState.FindObjectsAtPos(objectToMove.Pos.Add(delta)) {
+		meaningsMap := meanings[atPos.Item]
+
+		switch {
+		case meaningsMap["push"] || atPos.Kind != Char:
+			if !game.CheckCollision(delta, atPos, meanings, tick) {
+				success = false
+			}
+		case meaningsMap["stop"]:
+		default:
+		}
+	}
+
+	if success {
+		// Add a new tick to move!
+		change := Change{
+			Event: Move,
+			Id:    objectToMove.Id,
+			Pos:   delta,
+		}
+		*tick = append(*tick, change)
+		game.DoChange(change)
+	}
+
+	return success
+}
+
+func (objects ObjectList) FindObjectsAtPos(pos Pos) ObjectList {
+	objectsAtPos := ObjectList{}
+	for _, e := range objects {
+		if e.Pos == pos {
+			objectsAtPos = append(objectsAtPos, e)
+		}
+	}
+	return objectsAtPos
 }
 
 func (game *Game) FindId(id Id) *Object {
@@ -151,16 +203,16 @@ func (game *Game) EmitDelta(tick Tick) {
 	game.updateChan <- tick
 }
 
+// Not in use
 func (game *Game) DoTick(tick Tick) {
 	for _, change := range tick {
 		game.DoChange(change)
 	}
-	game.EmitDelta(tick)
 }
 
 func (game *Game) AddTick(tick Tick) {
-	game.DoTick(tick)
 	game.timeline = append(game.timeline, tick)
+	game.EmitDelta(tick)
 }
 
 func (game *Game) Undo() {
