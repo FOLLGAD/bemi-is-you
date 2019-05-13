@@ -20,6 +20,7 @@ export default class Game {
 		})
 	}
 	start() {
+		alert("bruh")
 		document.body.appendChild(this.app.view)
 
 		this.chars = new Map()
