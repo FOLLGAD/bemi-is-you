@@ -111,20 +111,24 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 		if msg.Data == "left" {
 			delta = Pos{-1, 0}
 		}
+
+		objectsToMove := ObjectList{}
+
 		somethingMoved := false
 		for affectedsKey := range meanings {
 			for modifiersKey := range meanings[affectedsKey] {
 				if modifiersKey == strconv.Itoa(msg.player) {
-					objects := game.objectState.FindCharByItem(affectedsKey)
-					// sort tiles based on delta
-					sortedObjects := objects.SortTiles(delta)
-					for _, toMoveObject := range sortedObjects {
-						success := game.CheckCollision(delta, toMoveObject, meanings, &tick)
-						if success {
-							somethingMoved = true
-						}
-					}
+					objectsToMove = append(objectsToMove, game.objectState.FindCharByItem(affectedsKey)...)
 				}
+			}
+		}
+
+		// sort tiles based on delta
+		sortedObjects := objectsToMove.SortTiles(delta)
+		for _, toMoveObject := range sortedObjects {
+			success := game.CheckCollision(delta, toMoveObject, meanings, &tick)
+			if success {
+				somethingMoved = true
 			}
 		}
 
@@ -173,10 +177,8 @@ func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meani
 				}
 			case meaningsMap["stop"]:
 				success = false
-			case meaningsMap["stop"]:
-
 			case meaningsMap["defeat"]:
-
+				// Success true
 			default:
 			}
 		}
