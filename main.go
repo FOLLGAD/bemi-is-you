@@ -59,6 +59,10 @@ func main() {
 		addObject(Pos{2, 5}, Adj, "1"),
 		addObject(Pos{0, 6}, Conj, "is"),
 		addObject(Pos{0, 7}, Adj, "2"),
+		addObject(Pos{4, 4}, Noun, "fish"),
+		addObject(Pos{4, 5}, Conj, "is"),
+		addObject(Pos{4, 6}, Adj, "defeat"),
+		addObject(Pos{11, 11}, Char, "fish"),
 	}
 	// ******
 
