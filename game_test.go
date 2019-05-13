@@ -27,9 +27,9 @@ func TestCollision(t *testing.T) {
 	ch := make(chan Tick)
 	game := Game{firstLevel, firstLevel.Objects, Timeline{}, ch}
 	tick := &Tick{}
-	meanings := []Meaning{
-		Meaning{[]string{"sami"}, []string{"1"}},
-		Meaning{[]string{"bemi"}, []string{"2"}},
+	meanings := Meanings{
+		"sami": {"1": true},
+		"bemi": {"2": true},
 	}
 
 	go func() {
@@ -49,6 +49,15 @@ func TestCollision(t *testing.T) {
 	}
 }
 
-func TestSortTiles(t *testing.T) {
-
+func TestSortTilesRight(t *testing.T) {
+	objectlist := ObjectList{
+		addObject(Pos{3, 4}, Char, "bemi"),
+		addObject(Pos{3, 5}, Char, "sami"),
+	}
+	sorted := objectlist.SortTiles(Pos{0, 1})
+	if sorted[0].Item != "sami" {
+		t.Error("Expected first index to be sami, got", sorted[0].Item)
+	} else if sorted[1].Item != "bemi" {
+		t.Error("Expected second index to be bemi, got", sorted[1].Item)
+	}
 }
