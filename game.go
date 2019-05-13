@@ -43,10 +43,12 @@ type Object struct {
 	Id   Id     `json:"id"`
 }
 
+type ObjectList []*Object
+
 type Level struct {
-	Objects []*Object `json:"objects"`
-	Height  int       `json:"height"`
-	Width   int       `json:"width"`
+	Objects ObjectList `json:"objects"`
+	Height  int        `json:"height"`
+	Width   int        `json:"width"`
 }
 
 type Event int
@@ -65,11 +67,6 @@ type Change struct {
 }
 type Tick []Change
 type Timeline []Tick
-
-// Game struct
-
-type ObjectList []*Object
-
 type Game struct {
 	level       Level
 	objectState ObjectList
@@ -94,6 +91,9 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 	var delta Pos
 
 	switch msg.Data {
+
+	case "restart":
+		game.objectState = game.level.Objects //bruh?
 	case "up":
 		delta = Pos{0, -1}
 		fallthrough
@@ -173,6 +173,10 @@ func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meani
 				}
 			case meaningsMap["stop"]:
 				success = false
+			case meaningsMap["stop"]:
+
+			case meaningsMap["defeat"]:
+
 			default:
 			}
 		}
