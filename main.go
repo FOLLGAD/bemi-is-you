@@ -98,6 +98,7 @@ func main() {
 			_, p, err := conn.ReadMessage()
 
 			if err != nil {
+				// Connetion timed out
 				fmt.Println(err)
 				conn.Close()
 
@@ -117,7 +118,7 @@ func main() {
 		}
 	})
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, string("hello"))
+		http.Redirect(w, r, "http://localhost:8080", http.StatusSeeOther)
 	})
 	http.ListenAndServe(":8081", nil)
 }
