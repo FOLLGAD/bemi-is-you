@@ -27,6 +27,13 @@ func (pos Pos) Add(addPos Pos) Pos {
 	}
 }
 
+func (pos Pos) Neg() Pos {
+	return Pos{
+		-pos.X,
+		-pos.Y,
+	}
+}
+
 type Id int // Randomized id?
 
 type Object struct {
@@ -104,21 +111,32 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 		if msg.Data == "left" {
 			delta = Pos{-1, 0}
 		}
+
+		objectsToMove := ObjectList{}
+
+		somethingMoved := false
 		for affectedsKey := range meanings {
 			for modifiersKey := range meanings[affectedsKey] {
 				if modifiersKey == strconv.Itoa(msg.player) {
-					objects := game.objectState.FindCharByItem(affectedsKey)
-					// sort tiles based on delta
-					sortedObjects := objects.SortTiles(delta)
-					for _, toMoveObject := range sortedObjects {
-						game.CheckCollision(delta, toMoveObject, meanings, &tick)
-					}
+					objectsToMove = append(objectsToMove, game.objectState.FindCharByItem(affectedsKey)...)
 				}
 			}
 		}
 
-		game.AddTick(tick)
-		break
+		// sort tiles based on delta
+		sortedObjects := objectsToMove.SortTiles(delta)
+		for _, toMoveObject := range sortedObjects {
+			success := game.CheckCollision(delta, toMoveObject, meanings, &tick)
+			if success {
+				somethingMoved = true
+			}
+		}
+
+		if somethingMoved {
+			game.AddTick(tick)
+		}
+	case "undo":
+		game.Undo()
 	}
 }
 
@@ -128,14 +146,14 @@ func (objects ObjectList) SortTiles(delta Pos) ObjectList {
 	// -1, 0 = start looking from left
 	// 0, 1 = start looking from down
 	// 0, -1 = start looking from up
-	if delta.X == 1 {
-		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.X > objects[j].Pos.X })
-	} else if delta.X == -1 {
-		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.X < objects[j].Pos.X })
-	} else if delta.Y == 1 {
-		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.Y > objects[j].Pos.Y })
-	} else if delta.X == -1 {
-		sort.Slice(objects, func(i, j int) bool { return objects[i].Pos.Y < objects[j].Pos.Y })
+	if delta.X > 0 {
+		sort.Slice(objects[:], func(i, j int) bool { return objects[i].Pos.X > objects[j].Pos.X })
+	} else if delta.X < 0 {
+		sort.Slice(objects[:], func(i, j int) bool { return objects[i].Pos.X < objects[j].Pos.X })
+	} else if delta.Y > 0 {
+		sort.Slice(objects[:], func(i, j int) bool { return objects[i].Pos.Y > objects[j].Pos.Y })
+	} else if delta.X < 0 {
+		sort.Slice(objects[:], func(i, j int) bool { return objects[i].Pos.Y < objects[j].Pos.Y })
 	}
 	return objects
 }
@@ -143,19 +161,26 @@ func (objects ObjectList) SortTiles(delta Pos) ObjectList {
 func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meanings, tick *Tick) (success bool) {
 	success = true
 
-	for _, atPos := range game.objectState.FindObjectsAtPos(objectToMove.Pos.Add(delta)) {
-		meaningsMap := meanings[atPos.Item]
+	if objectToMove.CheckOutOfBounds(game, delta) {
+		// Would be out of bounds
+		success = false
+	} else {
+		for _, atPos := range game.objectState.FindObjectsAtPos(objectToMove.Pos.Add(delta)) {
+			meaningsMap := meanings[atPos.Item]
 
-		switch {
-		case meaningsMap["push"]:
-			if !game.CheckCollision(delta, atPos, meanings, tick) {
+			switch {
+			case atPos.Kind == Char && objectToMove.Kind == Char && ((meaningsMap["1"] && meanings[objectToMove.Item]["1"]) || (meaningsMap["2"] && meanings[objectToMove.Item]["2"])):
+				// Do nothing
+			case meaningsMap["push"] || atPos.Kind != Char: // Text blocks are by default "push"
+				if !game.CheckCollision(delta, atPos, meanings, tick) {
+					success = false
+				}
+			case meaningsMap["stop"]:
 				success = false
+			case meaningsMap["defeat"]:
+				// Success true
+			default:
 			}
-		case meaningsMap["stop"]:
-
-		case meaningsMap["defeat"]:
-
-		default:
 		}
 	}
 
@@ -166,13 +191,8 @@ func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meani
 			Id:    objectToMove.Id,
 			Pos:   delta,
 		}
-
-		if !objectToMove.CheckOutOfBounds(game, delta) {
-			*tick = append(*tick, change)
-			game.DoChange(change)
-		} else {
-			success = false
-		}
+		*tick = append(*tick, change)
+		game.DoChange(change)
 	}
 
 	return success
@@ -203,7 +223,6 @@ func (game *Game) DoChange(change Change) {
 		obj := game.FindId(change.Id)
 		obj.Pos.X += change.Pos.X
 		obj.Pos.Y += change.Pos.Y
-		break
 	}
 }
 
@@ -214,6 +233,7 @@ func (obj Object) CheckOutOfBounds(game *Game, delta Pos) bool {
 	}
 	return false
 }
+
 func (game *Game) EmitDelta(tick Tick) {
 	game.updateChan <- tick
 }
@@ -232,10 +252,21 @@ func (game *Game) AddTick(tick Tick) {
 
 func (game *Game) Undo() {
 	length := len(game.timeline)
-	lastTick := game.timeline[length-1]
-	game.timeline = game.timeline[:len(game.timeline)-2] // Remove last tick
+	if length > 0 {
+		lastTick := game.timeline[length-1]
+		game.timeline = game.timeline[:length-1] // Remove last tick
 
-	for i := len(lastTick) - 1; i >= 0; i-- {
-		game.DoChange(lastTick[i])
+		for i, e := range lastTick {
+			if e.Event == Move {
+				e.Pos = e.Pos.Neg()
+			}
+			lastTick[i] = e
+		}
+
+		for i := len(lastTick) - 1; i >= 0; i-- {
+			game.DoChange(lastTick[i])
+		}
+
+		game.EmitDelta(lastTick)
 	}
 }
