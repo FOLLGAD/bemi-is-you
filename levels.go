@@ -1,11 +1,36 @@
 package main
 
 func getLevel(level int) Level {
+	if level == 0 {
+		return Level{
+			Width:  18,
+			Height: 12,
+			Objects: []Object{
+				addObject(Pos{2, 10}, Char, "bemi"),
+				addObject(Pos{16, 10}, Char, "sami"),
+
+				addObject(Pos{9, 5}, Char, "wall"),
+
+				addObject(Pos{0, 0}, Noun, "star"),
+				addObject(Pos{1, 0}, Conj, "is"),
+				addObject(Pos{2, 0}, Adj, "defeat"),
+
+				addObject(Pos{0, 2}, Noun, "bemi"),
+				addObject(Pos{1, 2}, Conj, "is"),
+				addObject(Pos{2, 2}, Adj, "1"),
+
+				addObject(Pos{0, 5}, Noun, "sami"),
+				addObject(Pos{1, 5}, Conj, "is"),
+				addObject(Pos{3, 5}, Adj, "2"),
+				addObject(Pos{11, 1}, Char, "star"),
+			},
+		}
+	}
 	if level == 1 {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Objects: []*Object{
+			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
 
@@ -27,9 +52,9 @@ func getLevel(level int) Level {
 				addObject(Pos{1, 0}, Conj, "is"),
 				addObject(Pos{2, 0}, Adj, "stop"),
 
-				addObject(Pos{0, 1}, Noun, "bemi"),
-				addObject(Pos{1, 1}, Conj, "is"),
-				addObject(Pos{2, 1}, Conj, "1"),
+				addObject(Pos{0, 2}, Noun, "bemi"),
+				addObject(Pos{1, 2}, Conj, "is"),
+				addObject(Pos{2, 2}, Adj, "1"),
 
 				addObject(Pos{0, 5}, Noun, "sami"),
 				addObject(Pos{1, 5}, Conj, "is"),
@@ -41,7 +66,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Objects: []*Object{
+			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
 
@@ -76,12 +101,12 @@ func getLevel(level int) Level {
 	return Level{
 		Width:   1,
 		Height:  1,
-		Objects: []*Object{},
+		Objects: []Object{},
 	}
 }
 
-func addObject(pos Pos, kind Kind, item string) *Object {
-	obj := &Object{
+func addObject(pos Pos, kind Kind, item string) Object {
+	obj := Object{
 		pos,
 		kind,
 		item,
