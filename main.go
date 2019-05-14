@@ -32,7 +32,7 @@ var upgrader = websocket.Upgrader{
 var idCounter Id = 0
 
 func main() {
-	var firstLevel = getLevel(1)
+	var firstLevel = getLevel(0)
 
 	players := map[int]Player{}
 
