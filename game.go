@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strconv"
 )
@@ -46,9 +47,9 @@ type Object struct {
 type ObjectList []*Object
 
 type Level struct {
-	Objects ObjectList `json:"objects"`
-	Height  int        `json:"height"`
-	Width   int        `json:"width"`
+	Objects []Object `json:"objects"`
+	Height  int      `json:"height"`
+	Width   int      `json:"width"`
 }
 
 type Event int
@@ -65,13 +66,18 @@ type Change struct {
 	Id    Id    `json:"id"`
 	Pos   Pos   `json:"pos"` // Move: deltapos
 }
+
 type Tick []Change
+
 type Timeline []Tick
+
 type Game struct {
 	level       Level
-	objectState ObjectList
+	Width       int        `json:"width"`
+	Height      int        `json:"height"`
+	ObjectState ObjectList `json:"objects"`
 	timeline    Timeline
-	updateChan  chan<- Tick
+	updateChan  chan<- Message
 }
 
 func (objs ObjectList) FindCharByItem(item string) ObjectList {
@@ -84,16 +90,34 @@ func (objs ObjectList) FindCharByItem(item string) ObjectList {
 	return outs
 }
 
+func MakeGame(level Level, updateChan chan<- Message) *Game {
+	game := &Game{Level{}, 0, 0, ObjectList{}, Timeline{}, updateChan}
+	game.SetLevel(level)
+	game.timeline = Timeline{}
+	return game
+}
+
+func (game *Game) SetLevel(level Level) {
+	game.ObjectState = ObjectList{}
+	game.level = level
+	game.timeline = Timeline{}
+	for i := range level.Objects {
+		newObj := level.Objects[i]
+		game.ObjectState = append(game.ObjectState, &newObj)
+	}
+
+	game.EmitState()
+}
+
 func (game *Game) ReceiveData(msg ReceivedMessage) {
-	meanings := findSentences(game.objectState)
+	meanings := findSentences(game.ObjectState)
 
 	var tick Tick
 	var delta Pos
 
 	switch msg.Data {
-
 	case "restart":
-		game.objectState = game.level.Objects //bruh?
+		game.SetLevel(game.level)
 	case "up":
 		delta = Pos{0, -1}
 		fallthrough
@@ -118,7 +142,7 @@ func (game *Game) ReceiveData(msg ReceivedMessage) {
 		for affectedsKey := range meanings {
 			for modifiersKey := range meanings[affectedsKey] {
 				if modifiersKey == strconv.Itoa(msg.player) {
-					objectsToMove = append(objectsToMove, game.objectState.FindCharByItem(affectedsKey)...)
+					objectsToMove = append(objectsToMove, game.ObjectState.FindCharByItem(affectedsKey)...)
 				}
 			}
 		}
@@ -165,12 +189,12 @@ func (game *Game) CheckCollision(delta Pos, objectToMove *Object, meanings Meani
 		// Would be out of bounds
 		success = false
 	} else {
-		for _, atPos := range game.objectState.FindObjectsAtPos(objectToMove.Pos.Add(delta)) {
+		for _, atPos := range game.ObjectState.FindObjectsAtPos(objectToMove.Pos.Add(delta)) {
 			meaningsMap := meanings[atPos.Item]
 
 			switch {
 			case atPos.Kind == Char && objectToMove.Kind == Char && ((meaningsMap["1"] && meanings[objectToMove.Item]["1"]) || (meaningsMap["2"] && meanings[objectToMove.Item]["2"])):
-				// Do nothing
+			// Do nothing
 			case meaningsMap["push"] || atPos.Kind != Char: // Text blocks are by default "push"
 				if !game.CheckCollision(delta, atPos, meanings, tick) {
 					success = false
@@ -208,8 +232,8 @@ func (objects ObjectList) FindObjectsAtPos(pos Pos) ObjectList {
 	return objectsAtPos
 }
 
-func (game *Game) FindId(id Id) *Object {
-	for _, e := range game.objectState {
+func (objectList ObjectList) FindId(id Id) *Object {
+	for _, e := range objectList {
 		if e.Id == id {
 			return e
 		}
@@ -217,12 +241,26 @@ func (game *Game) FindId(id Id) *Object {
 	return &Object{} // Shouldn't happen
 }
 
+func (objects ObjectList) RemoveById(id Id) ObjectList {
+	for i := range objects {
+		if objects[i].Id == id {
+			objects[i] = objects[len(objects)-1]
+			return objects[:len(objects)-1]
+		}
+	}
+	return objects
+}
+
 func (game *Game) DoChange(change Change) {
 	switch change.Event {
 	case Move:
-		obj := game.FindId(change.Id)
+		obj := game.ObjectState.FindId(change.Id)
 		obj.Pos.X += change.Pos.X
 		obj.Pos.Y += change.Pos.Y
+	case Death:
+		fmt.Println(len(game.ObjectState))
+		game.ObjectState.RemoveById(change.Id)
+		fmt.Println(len(game.ObjectState))
 	}
 }
 
@@ -235,7 +273,43 @@ func (obj Object) CheckOutOfBounds(game *Game, delta Pos) bool {
 }
 
 func (game *Game) EmitDelta(tick Tick) {
-	game.updateChan <- tick
+	if len(tick) > 0 {
+		game.updateChan <- Message{tick, 1}
+	}
+}
+
+func (game *Game) EmitState() {
+	game.updateChan <- Message{game, 0}
+}
+
+func (game *Game) CheckWins(tick *Tick) bool {
+	meanings := findSentences(game.ObjectState)
+	toCheck := []string{}
+	for p := range meanings {
+		if meanings[p]["1"] || meanings[p]["2"] {
+			toCheck = append(toCheck, p)
+		}
+	}
+	for _, item := range toCheck {
+		chars := game.ObjectState.FindCharByItem(item)
+		for _, char := range chars {
+			fmt.Println(char.Item)
+			colliding := game.ObjectState.FindObjectsAtPos(char.Pos)
+			for _, colObj := range colliding {
+				if meanings[colObj.Item]["win"] {
+					return true
+				}
+				if meanings[colObj.Item]["defeat"] {
+					fmt.Println("DIED", char.Item)
+					change := Change{Event: Death, Id: char.Id, Pos: char.Pos}
+					game.DoChange(change)
+					*tick = append(*tick, change)
+				}
+			}
+		}
+	}
+
+	return false
 }
 
 // Not in use
@@ -246,6 +320,7 @@ func (game *Game) DoTick(tick Tick) {
 }
 
 func (game *Game) AddTick(tick Tick) {
+	game.CheckWins(&tick)
 	game.timeline = append(game.timeline, tick)
 	game.EmitDelta(tick)
 }

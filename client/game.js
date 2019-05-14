@@ -6,7 +6,7 @@ const TILE_SIZE = 64 // 64*64 pixels represents a tile
 // Events
 const MOVE = 0,
 	DEATH = 1,
-	SPAN = 2
+	SPAWN = 2
 // Transform: death+spawn
 
 export default class Game {
@@ -18,9 +18,9 @@ export default class Game {
 			resolution: window.devicePixelRatio || 1,
 			backgroundColor: 0xeeeeee,
 		})
+		this.playerNum = null
 	}
 	start() {
-		alert("bruh")
 		document.body.appendChild(this.app.view)
 
 		this.chars = new Map()
@@ -68,14 +68,23 @@ export default class Game {
 		}
 	}
 	getTexture(object) {
-		if (object.kind == 0) return object.item + "_block.png"
+		if (object.item == "1" || object.item == "2") {
+			if (this.playerNum == object.item) {
+				return "1.png"
+			} else {
+				return "2.png"
+			}
+		} else if (object.kind == 0) return object.item + "_block.png"
 		else return object.item + ".png"
 	}
 	removeChar(characterId) {
-		let index = this.chars.findIndex(ch => ch.id == characterId)
-		if (index !== -1) {
-			this.chars.splice(index, 1)
+		let char = this.chars.get(characterId)
+		if (!char) {
+			console.warn("Tried to remove non-existing character", characterId)
+			return
 		}
+		char.destroy()
+		this.chars.delete(characterId)
 	}
 	setLevel(data) {
 		this.level = new Level(data)
@@ -87,6 +96,7 @@ export default class Game {
 		if (tick != null) {
 			tick.forEach(change => {
 				let { event, id, pos } = change
+				console.log(event, id, pos)
 
 				switch (event) {
 					case MOVE: // Move
@@ -94,6 +104,10 @@ export default class Game {
 						char.pos.x += pos.x
 						char.pos.y += pos.y
 						this.updateChar(char)
+						break
+					case DEATH:
+						this.removeChar(id)
+						break
 				}
 			})
 		}
