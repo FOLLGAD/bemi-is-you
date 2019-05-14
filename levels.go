@@ -88,11 +88,11 @@ func getLevel(level int) Level {
 
 				addObject(Pos{0, 1}, Noun, "bemi"),
 				addObject(Pos{1, 1}, Conj, "is"),
-				addObject(Pos{2, 1}, Adj, "1"),
+				addObject(Pos{2, 1}, Adj, "2"),
 
 				addObject(Pos{0, 5}, Noun, "sami"),
 				addObject(Pos{1, 5}, Conj, "is"),
-				addObject(Pos{3, 5}, Adj, "2"),
+				addObject(Pos{3, 5}, Adj, "1"),
 
 				addObject(Pos{15, 0}, Noun, "star"),
 				addObject(Pos{16, 0}, Conj, "is"),
@@ -190,11 +190,11 @@ func getLevel(level int) Level {
 
 				addObject(Pos{2, 8}, Noun, "bemi"),
 				addObject(Pos{3, 8}, Conj, "is"),
-				addObject(Pos{4, 8}, Adj, "1"),
+				addObject(Pos{4, 8}, Adj, "2"),
 
 				addObject(Pos{0, 6}, Noun, "sami"),
 				addObject(Pos{1, 6}, Conj, "is"),
-				addObject(Pos{2, 6}, Adj, "2"),
+				addObject(Pos{2, 6}, Adj, "1"),
 
 				addObject(Pos{12, 2}, Noun, "star"),
 				addObject(Pos{12, 3}, Conj, "is"),
