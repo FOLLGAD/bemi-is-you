@@ -353,6 +353,7 @@ func (game *Game) CheckWins(tick *Tick) {
 
 	if isWinning {
 		game.SetLevel(getLevel(game.level.Number + 1))
+		*tick = Tick{}
 	}
 }
 
