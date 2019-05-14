@@ -31,39 +31,9 @@ var upgrader = websocket.Upgrader{
 
 var idCounter Id = 0
 
-func addObject(pos Pos, kind Kind, item string) *Object {
-	obj := &Object{
-		pos,
-		kind,
-		item,
-		idCounter,
-	}
-	idCounter++
-	return obj
-}
-
 func main() {
 	// LEVEL
-	var firstLevel = Level{}
-	firstLevel.Width = 18
-	firstLevel.Height = 12
-
-	firstLevel.Objects = []*Object{
-		addObject(Pos{10, 10}, Char, "bemi"),
-		addObject(Pos{8, 10}, Char, "sami"),
-		addObject(Pos{0, 0}, Noun, "bemi"),
-		addObject(Pos{1, 0}, Conj, "is"),
-		addObject(Pos{2, 0}, Adj, "1"),
-		addObject(Pos{0, 5}, Noun, "sami"),
-		addObject(Pos{1, 5}, Conj, "is"),
-		addObject(Pos{2, 5}, Adj, "1"),
-		addObject(Pos{0, 6}, Conj, "is"),
-		addObject(Pos{0, 7}, Adj, "2"),
-		addObject(Pos{4, 4}, Noun, "fish"),
-		addObject(Pos{4, 5}, Conj, "is"),
-		addObject(Pos{4, 6}, Adj, "defeat"),
-		addObject(Pos{11, 11}, Char, "fish"),
-	}
+	var firstLevel = getLevel(1)
 	// ******
 
 	players := []Player{}
