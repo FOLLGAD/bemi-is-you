@@ -25,24 +25,18 @@ export default class Game {
 
 		this.chars = new Map()
 
-		let app = this.app
-
 		const background = PIXI.Texture.from('../textures/background.png')
-		// background.width = app.view.width
-		// background.height = app.view.height
-		// Create the background
-
 		let bgElement = new PIXI.Sprite.from(background)
-		bgElement.width = app.view.width
-		bgElement.height = app.view.height
-		app.stage.addChild(bgElement)
+		bgElement.width = this.app.view.width
+		bgElement.height = this.app.view.height
+		this.app.stage.addChild(bgElement)
 
 		const container = new PIXI.Container()
 		this.container = container
 		container.x = 0
 		container.y = 0
 
-		app.stage.addChild(container)
+		this.app.stage.addChild(container)
 
 		this.level.objects.forEach(ob => {
 			this.setChar(ob)
@@ -69,7 +63,7 @@ export default class Game {
 	}
 	getTexture(object) {
 		if (object.item == "1" || object.item == "2") {
-			if (this.playerNum == object.item) {
+			if (this.playerNum == Number(object.item)) {
 				return "1.png"
 			} else {
 				return "2.png"
@@ -83,7 +77,7 @@ export default class Game {
 			console.warn("Tried to remove non-existing character", characterId)
 			return
 		}
-		char.destroy()
+		char.destroy() // Destroy the PIXI instance to remove it from the canvas
 		this.chars.delete(characterId)
 	}
 	setLevel(data) {
@@ -95,21 +89,26 @@ export default class Game {
 	deltaTick(tick) {
 		if (tick != null) {
 			tick.forEach(change => {
-				let { event, id, pos } = change
-				console.log(event, id, pos)
-
-				switch (event) {
+				switch (change.event) {
 					case MOVE: // Move
-						let char = this.level.objects.find(ob => ob.id == id)
-						char.pos.x += pos.x
-						char.pos.y += pos.y
+						let char = this.level.objects.find(ob => ob.id == change.id)
+						char.pos.x += change.pos.x
+						char.pos.y += change.pos.y
 						this.updateChar(char)
 						break
 					case DEATH:
-						this.removeChar(id)
+						this.level.objects = this.level.objects.filter(d => d.id != change.id)
+						this.removeChar(change.id)
+						break
+					case SPAWN:
+						let newChar = { pos: change.pos, id: change.id, item: change.item, kind: change.kind }
+						this.level.objects.push(newChar)
+						this.setChar(newChar)
 						break
 				}
 			})
+		} else {
+			console.warn("Tick was null!")
 		}
 	}
 }

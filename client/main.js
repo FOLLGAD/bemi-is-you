@@ -19,8 +19,10 @@ function main() {
 				break
 			case 1: // Delta info
 				game.deltaTick(data.data)
+				break
 			case 2:
 				game.playerNum = data.data
+				break
 		}
 	}
 	ws.addEventListener('message', wsHandler)
