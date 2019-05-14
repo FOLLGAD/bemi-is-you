@@ -5,6 +5,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  10,
 			Height: 10,
+			Number: 0,
 			Objects: []Object{
 				addObject(Pos{3, 8}, Char, "bemi"),
 				addObject(Pos{7, 8}, Char, "sami"),
@@ -60,6 +61,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
+			Number: 1,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
@@ -89,6 +91,10 @@ func getLevel(level int) Level {
 				addObject(Pos{1, 5}, Conj, "is"),
 				addObject(Pos{3, 5}, Adj, "2"),
 
+				addObject(Pos{15, 0}, Noun, "star"),
+				addObject(Pos{16, 0}, Conj, "is"),
+				addObject(Pos{17, 0}, Adj, "win"),
+
 				addObject(Pos{11, 1}, Char, "star"),
 				addObject(Pos{17, 5}, Noun, "star"),
 				addObject(Pos{17, 6}, Conj, "is"),
@@ -99,6 +105,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
+			Number: 2,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "fish"),
 				addObject(Pos{16, 10}, Char, "soup"),
@@ -315,8 +322,13 @@ func addObject(pos Pos, kind Kind, item string) Object {
 		pos,
 		kind,
 		item,
-		idCounter,
+		newId(),
 	}
-	idCounter++
 	return obj
+}
+
+func newId() Id {
+	oldId := idCounter
+	idCounter++
+	return oldId
 }
