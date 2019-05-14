@@ -41,6 +41,7 @@ export default class Game {
 		this.level.objects.forEach(ob => {
 			this.setChar(ob)
 		})
+		this.app.renderer.resize(TILE_SIZE * this.level.width, TILE_SIZE * this.level.height);
 	}
 	setChar(char) {
 		const texture = PIXI.Texture.from('../textures/' + this.getTexture(char))
@@ -81,6 +82,7 @@ export default class Game {
 		this.chars.delete(characterId)
 	}
 	setLevel(data) {
+		console.log(data)
 		this.level = new Level(data)
 	}
 	listen(elem, func) {
@@ -92,6 +94,7 @@ export default class Game {
 				switch (change.event) {
 					case MOVE: // Move
 						let char = this.level.objects.find(ob => ob.id == change.id)
+						console.log(change)
 						char.pos.x += change.pos.x
 						char.pos.y += change.pos.y
 						this.updateChar(char)
