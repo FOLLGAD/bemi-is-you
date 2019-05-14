@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func getLevel(level int) Level {
 	if level == 0 {
 		return Level{
@@ -28,6 +30,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  10,
 			Height: 10,
+			Number: 1,
 			Objects: []Object{
 				addObject(Pos{3, 8}, Char, "bemi"),
 				addObject(Pos{7, 8}, Char, "sami"),
@@ -61,7 +64,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Number: 1,
+			Number: 2,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
@@ -85,7 +88,7 @@ func getLevel(level int) Level {
 
 				addObject(Pos{0, 1}, Noun, "bemi"),
 				addObject(Pos{1, 1}, Conj, "is"),
-				addObject(Pos{2, 1}, Conj, "1"),
+				addObject(Pos{2, 1}, Adj, "1"),
 
 				addObject(Pos{0, 5}, Noun, "sami"),
 				addObject(Pos{1, 5}, Conj, "is"),
@@ -98,14 +101,14 @@ func getLevel(level int) Level {
 				addObject(Pos{11, 1}, Char, "star"),
 				addObject(Pos{17, 5}, Noun, "star"),
 				addObject(Pos{17, 6}, Conj, "is"),
-				addObject(Pos{17, 7}, Conj, "win"),
+				addObject(Pos{17, 7}, Adj, "win"),
 			},
 		}
 	} else if level == 3 {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Number: 2,
+			Number: 3,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "fish"),
 				addObject(Pos{16, 10}, Char, "soup"),
@@ -138,7 +141,7 @@ func getLevel(level int) Level {
 				addObject(Pos{11, 1}, Char, "sami"),
 				addObject(Pos{17, 5}, Noun, "sami"),
 				addObject(Pos{17, 6}, Conj, "is"),
-				addObject(Pos{17, 7}, Conj, "win"),
+				addObject(Pos{17, 7}, Adj, "win"),
 			},
 		}
 
@@ -146,6 +149,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  10,
 			Height: 15,
+			Number: 4,
 			Objects: []Object{
 				addObject(Pos{7, 2}, Char, "bemi"),
 				addObject(Pos{12, 10}, Char, "sami"),
@@ -194,13 +198,14 @@ func getLevel(level int) Level {
 
 				addObject(Pos{12, 2}, Noun, "star"),
 				addObject(Pos{12, 3}, Conj, "is"),
-				addObject(Pos{12, 4}, Conj, "win"),
+				addObject(Pos{12, 4}, Adj, "win"),
 			},
 		}
 	} else if level == 5 {
 		return Level{
 			Width:  10,
 			Height: 10,
+			Number: 5,
 			Objects: []Object{
 
 				addObject(Pos{7, 2}, Char, "wall"),
@@ -241,13 +246,14 @@ func getLevel(level int) Level {
 
 				addObject(Pos{8, 5}, Noun, "star"),
 				addObject(Pos{8, 6}, Conj, "is"),
-				addObject(Pos{8, 7}, Conj, "win"),
+				addObject(Pos{8, 7}, Adj, "win"),
 			},
 		}
 	} else if level == 6 {
 		return Level{
 			Width:  10,
 			Height: 10,
+			Number: 6,
 			Objects: []Object{
 
 				addObject(Pos{7, 2}, Adj, "win"),
@@ -318,6 +324,9 @@ func getLevel(level int) Level {
 }
 
 func addObject(pos Pos, kind Kind, item string) Object {
+	if kind == Conj && item != "is" && item != "and" {
+		fmt.Println(item, "is not a conjugation.", pos)
+	}
 	obj := Object{
 		pos,
 		kind,
