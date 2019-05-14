@@ -137,8 +137,8 @@ func getLevel(level int) Level {
 
 	} else if level == 4 {
 		return Level{
-			Width:  10,
-			Height: 15,
+			Width:  16,
+			Height: 12,
 			Objects: []Object{
 				addObject(Pos{7, 2}, Char, "bemi"),
 				addObject(Pos{12, 10}, Char, "sami"),
