@@ -253,9 +253,9 @@ func getLevel(level int) Level {
 				addObject(Pos{7, 2}, Adj, "win"),
 				addObject(Pos{8, 8}, Char, "sami"),
 
-				addObject(Pos{0, 2}, Noun, "fish"),
-				addObject(Pos{1, 2}, Conj, "is"),
-				addObject(Pos{2, 2}, Adj, "stop"),
+				addObject(Pos{0, 1}, Noun, "fish"),
+				addObject(Pos{1, 1}, Conj, "is"),
+				addObject(Pos{2, 1}, Adj, "stop"),
 
 				addObject(Pos{0, 0}, Noun, "wall"),
 				addObject(Pos{1, 0}, Conj, "is"),
@@ -288,6 +288,7 @@ func getLevel(level int) Level {
 				addObject(Pos{2, 6}, Adj, "1"),
 
 				addObject(Pos{8, 5}, Adj, "push"),
+				addObject(Pos{8, 6}, Conj, "is"),
 			},
 		}
 	}
