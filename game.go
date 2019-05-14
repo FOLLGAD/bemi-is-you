@@ -102,6 +102,8 @@ func MakeGame(level Level, updateChan chan<- Message) *Game {
 func (game *Game) SetLevel(level Level) {
 	game.ObjectState = ObjectList{}
 	game.level = level
+	game.Width = level.Width
+	game.Height = level.Height
 	game.timeline = Timeline{}
 	for i := range level.Objects {
 		newObj := level.Objects[i]

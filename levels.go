@@ -94,10 +94,6 @@ func getLevel(level int) Level {
 				addObject(Pos{1, 5}, Conj, "is"),
 				addObject(Pos{3, 5}, Adj, "2"),
 
-				addObject(Pos{15, 0}, Noun, "star"),
-				addObject(Pos{16, 0}, Conj, "is"),
-				addObject(Pos{17, 0}, Adj, "win"),
-
 				addObject(Pos{11, 1}, Char, "star"),
 				addObject(Pos{17, 5}, Noun, "star"),
 				addObject(Pos{17, 6}, Conj, "is"),

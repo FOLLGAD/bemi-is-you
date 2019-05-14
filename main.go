@@ -32,8 +32,6 @@ var upgrader = websocket.Upgrader{
 var idCounter Id = 0
 
 func main() {
-	var firstLevel = getLevel(0)
-
 	players := map[int]Player{}
 
 	updateChan := make(chan Message)
@@ -49,7 +47,7 @@ func main() {
 		}
 	}()
 
-	game := MakeGame(firstLevel, updateChan)
+	game := MakeGame(getLevel(0), updateChan)
 
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
