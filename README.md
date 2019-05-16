@@ -13,6 +13,10 @@
 - Golang webserver
 - Förmedla karaktärers positioner samt level-info över [Websockets](https://github.com/gorilla/websocket)
 
+## Gameplay
+
+You and your friend play together through different levels online. Text blocks build up the logic of the levels which you can move and affect in different ways in order to proceed to the next level. 
+
 ## Game mechanics
 
 - Words
@@ -22,13 +26,13 @@
 
 ### Joining words
 
-`IS`, `AND`
+`IS`
 
 ### Sentence building
 
-`NOUN` (`AND` `NOUN`) `IS` `ADJECTIVE` (`AND` `ADJECTIVE`)
+`NOUN` `IS` `ADJECTIVE`
 
-`NOUN` (`AND` `NOUN`) `IS` `NOUN`
+`NOUN` `IS` `NOUN`
 
 ## Controls
 
