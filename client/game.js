@@ -1,7 +1,9 @@
-import * as PIXI from 'pixi.js';
-import Level from './level';
+import * as PIXI from 'pixi.js'
+import { DropShadowFilter } from '@pixi/filter-drop-shadow';
 
-const TILE_SIZE = 64 // 64*64 pixels represents a tile
+import Level from './level'
+
+const TILE_SIZE = 128 // 64*64 pixels represents a tile
 
 // Events
 const MOVE = 0,
@@ -21,14 +23,14 @@ export default class Game {
 		this.playerNum = null
 	}
 	start() {
-		document.body.appendChild(this.app.view)
+		document.querySelector("#canv").appendChild(this.app.view)
 
 		this.chars = new Map()
 
 		const background = PIXI.Texture.from('../textures/background.png')
 		let bgElement = new PIXI.Sprite.from(background)
-		bgElement.width = this.app.view.width
-		bgElement.height = this.app.view.height
+		bgElement.width = this.app.screen.width
+		bgElement.height = this.app.screen.height
 		this.app.stage.addChild(bgElement)
 
 		const container = new PIXI.Container()
@@ -36,23 +38,38 @@ export default class Game {
 		container.x = 0
 		container.y = 0
 
+		// Add a dropshadow effect
+		this.container.filters = [new DropShadowFilter({ distance: 5, color: 0x0, alpha: 0.3, blur: 50, pixelSize: 1 / 16 })]
+
 		this.app.stage.addChild(container)
 
 		this.level.objects.forEach(ob => {
 			this.setChar(ob)
 		})
+		this.container.sortChildren()
+
 		this.app.renderer.resize(TILE_SIZE * this.level.width, TILE_SIZE * this.level.height);
 	}
 	setChar(char) {
 		const texture = PIXI.Texture.from('../textures/' + this.getTexture(char))
 		const pixiChar = new PIXI.Sprite(texture)
-		const scaleY = 4
-		const scaleX = scaleY
-		pixiChar.scale.set(scaleX, scaleY)
+
+		pixiChar.width = pixiChar.height = TILE_SIZE
+
+		if (["wall"].indexOf(char.item) != -1) { // Full-tile blocks should be on bottom
+			pixiChar.zIndex = 0
+		} else if (char.kind == 0) {
+			pixiChar.zIndex = 5
+		} else { // Text should be on top
+			pixiChar.zIndex = 10
+		}
+
 		pixiChar.x = TILE_SIZE * char.pos.x
 		pixiChar.y = TILE_SIZE * char.pos.y
 		this.container.addChild(pixiChar)
 		this.chars.set(char.id, pixiChar)
+
+		// pixiChar.filters = [new DropShadowFilter({distance:0})]
 	}
 	updateChar(charObject) {
 		let char = this.chars.get(charObject.id)
@@ -94,7 +111,6 @@ export default class Game {
 				switch (change.event) {
 					case MOVE: // Move
 						let char = this.level.objects.find(ob => ob.id == change.id)
-						console.log(change)
 						char.pos.x += change.pos.x
 						char.pos.y += change.pos.y
 						this.updateChar(char)
@@ -113,5 +129,6 @@ export default class Game {
 		} else {
 			console.warn("Tick was null!")
 		}
+		this.container.sortChildren()
 	}
 }
