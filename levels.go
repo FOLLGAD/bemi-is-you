@@ -92,7 +92,7 @@ func getLevel(level int) Level {
 
 				addObject(Pos{0, 5}, Noun, "sami"),
 				addObject(Pos{1, 5}, Conj, "is"),
-				addObject(Pos{3, 5}, Adj, "1"),
+				addObject(Pos{2, 6}, Adj, "1"),
 
 				addObject(Pos{11, 1}, Char, "star"),
 				addObject(Pos{17, 5}, Noun, "star"),
@@ -126,9 +126,9 @@ func getLevel(level int) Level {
 				addObject(Pos{1, 0}, Conj, "is"),
 				addObject(Pos{2, 0}, Adj, "stop"),
 
-				addObject(Pos{0, 2}, Noun, "fish"),
-				addObject(Pos{0, 3}, Conj, "is"),
-				addObject(Pos{0, 4}, Adj, "1"),
+				addObject(Pos{0, 1}, Noun, "fish"),
+				addObject(Pos{1, 1}, Conj, "is"),
+				addObject(Pos{2, 1}, Adj, "1"),
 
 				addObject(Pos{0, 6}, Noun, "soup"),
 				addObject(Pos{1, 6}, Conj, "is"),
@@ -243,6 +243,52 @@ func getLevel(level int) Level {
 		}
 	} else if level == 6 {
 		return Level{
+			Width:  18,
+			Height: 12,
+			Number: 4,
+			Objects: []Object{
+				addObject(Pos{2, 10}, Char, "bemi"),
+				addObject(Pos{16, 10}, Char, "sami"),
+
+				addObject(Pos{9, 0}, Char, "wall"),
+				addObject(Pos{9, 1}, Char, "wall"),
+				addObject(Pos{9, 2}, Char, "wall"),
+				addObject(Pos{9, 3}, Char, "wall"),
+				addObject(Pos{9, 4}, Char, "wall"),
+				addObject(Pos{9, 5}, Char, "wall"),
+				addObject(Pos{9, 6}, Char, "wall"),
+				addObject(Pos{9, 7}, Char, "wall"),
+				addObject(Pos{9, 8}, Char, "wall"),
+				addObject(Pos{9, 9}, Char, "wall"),
+				addObject(Pos{9, 10}, Char, "wall"),
+				addObject(Pos{9, 11}, Char, "wall"),
+
+				addObject(Pos{0, 1}, Noun, "wall"),
+				addObject(Pos{1, 1}, Conj, "is"),
+				addObject(Pos{2, 1}, Adj, "stop"),
+
+				addObject(Pos{2, 2}, Adj, "push"),
+
+				addObject(Pos{14, 7}, Noun, "bemi"),
+				addObject(Pos{14, 8}, Conj, "is"),
+				addObject(Pos{14, 6}, Adj, "2"),
+
+				addObject(Pos{0, 7}, Noun, "sami"),
+				addObject(Pos{1, 7}, Conj, "is"),
+				addObject(Pos{2, 7}, Adj, "1"),
+
+				addObject(Pos{11, 0}, Char, "wall"),
+				addObject(Pos{11, 1}, Char, "wall"),
+				addObject(Pos{10, 1}, Char, "wall"),
+
+				addObject(Pos{10, 0}, Char, "star"),
+				addObject(Pos{17, 0}, Noun, "star"),
+				addObject(Pos{17, 1}, Conj, "is"),
+				addObject(Pos{17, 2}, Adj, "win"),
+			},
+		}
+	} else if level == 7 {
+		return Level{
 			Width:  10,
 			Height: 10,
 			Number: 6,
@@ -289,7 +335,59 @@ func getLevel(level int) Level {
 				addObject(Pos{8, 6}, Conj, "is"),
 			},
 		}
-	} else if level == 7 {
+	} else if level == 8 {
+		return Level{
+			Width:  18,
+			Height: 12,
+			Number: 4,
+			Objects: []Object{
+				addObject(Pos{2, 10}, Char, "bemi"),
+				addObject(Pos{16, 10}, Char, "sami"),
+
+				addObject(Pos{9, 0}, Char, "wall"),
+				addObject(Pos{9, 1}, Char, "wall"),
+				addObject(Pos{9, 2}, Char, "wall"),
+				addObject(Pos{9, 3}, Char, "wall"),
+				addObject(Pos{9, 4}, Char, "wall"),
+				addObject(Pos{9, 5}, Char, "wall"),
+				addObject(Pos{9, 6}, Char, "wall"),
+				addObject(Pos{9, 7}, Char, "wall"),
+				addObject(Pos{9, 8}, Char, "wall"),
+				addObject(Pos{9, 9}, Char, "wall"),
+				addObject(Pos{9, 10}, Char, "wall"),
+				addObject(Pos{9, 11}, Char, "wall"),
+
+				addObject(Pos{10, 4}, Char, "wall"),
+				addObject(Pos{11, 4}, Char, "wall"),
+				addObject(Pos{12, 4}, Char, "wall"),
+				addObject(Pos{13, 4}, Char, "wall"),
+				addObject(Pos{14, 4}, Char, "wall"),
+				addObject(Pos{15, 4}, Char, "wall"),
+				addObject(Pos{16, 4}, Char, "wall"),
+				addObject(Pos{17, 4}, Char, "wall"),
+
+				addObject(Pos{0, 0}, Noun, "wall"),
+				addObject(Pos{1, 0}, Conj, "is"),
+				addObject(Pos{2, 0}, Adj, "defeat"),
+
+				addObject(Pos{14, 7}, Noun, "bemi"),
+				addObject(Pos{15, 8}, Conj, "is"),
+				addObject(Pos{14, 6}, Adj, "2"),
+
+				addObject(Pos{12, 6}, Adj, "push"),
+				addObject(Pos{11, 6}, Conj, "is"),
+
+				addObject(Pos{0, 7}, Noun, "sami"),
+				addObject(Pos{1, 7}, Conj, "is"),
+				addObject(Pos{2, 7}, Adj, "1"),
+
+				addObject(Pos{10, 0}, Char, "star"),
+				addObject(Pos{17, 0}, Noun, "star"),
+				addObject(Pos{17, 1}, Conj, "is"),
+				addObject(Pos{17, 2}, Adj, "win"),
+			},
+		}
+	} else if level == 9 {
 		return Level{
 			Width:  18,
 			Height: 15,
@@ -383,7 +481,7 @@ func getLevel(level int) Level {
 				addObject(Pos{6, 6}, Conj, "is"),
 			},
 		}
-	} else if level == 8 {
+	} else if level == 10 {
 		return Level{
 			Width:  18,
 			Height: 15,
@@ -475,7 +573,7 @@ func getLevel(level int) Level {
 				addObject(Pos{12, 9}, Char, "sami"),
 			},
 		}
-	} else if level == 9 {
+	} else if level == 11 {
 		return Level{
 			Width:  18,
 			Height: 15,
@@ -585,30 +683,6 @@ func getLevel(level int) Level {
 				addObject(Pos{12, 9}, Char, "sami"),
 			},
 		}
-	}
-
-	//default level for testing and what not
-	return Level{
-		Width:  1,
-		Height: 1,
-		Objects: []Object{
-			addObject(Pos{2, 10}, Char, "bemi"),
-			addObject(Pos{16, 10}, Char, "sami"),
-
-			addObject(Pos{9, 5}, Char, "wall"),
-
-			addObject(Pos{0, 0}, Noun, "star"),
-			addObject(Pos{1, 0}, Conj, "is"),
-			addObject(Pos{2, 0}, Adj, "defeat"),
-
-			addObject(Pos{0, 2}, Noun, "bemi"),
-			addObject(Pos{1, 2}, Conj, "is"),
-			addObject(Pos{2, 2}, Adj, "1"),
-
-			addObject(Pos{0, 5}, Noun, "sami"),
-			addObject(Pos{1, 5}, Conj, "is"),
-			addObject(Pos{3, 5}, Adj, "2"),
-			addObject(Pos{11, 1}, Char, "star")},
 	}
 
 	//default level for testing and what not
