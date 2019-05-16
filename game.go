@@ -287,12 +287,12 @@ func (obj Object) CheckOutOfBounds(game *Game, delta Pos) bool {
 
 func (game *Game) EmitDelta(tick Tick) {
 	if len(tick) > 0 {
-		game.updateChan <- Message{tick, 1}
+		game.updateChan <- Message{Data: tick, MsgType: 1}
 	}
 }
 
 func (game *Game) EmitState() {
-	game.updateChan <- Message{game, 0}
+	game.updateChan <- Message{Data: game, MsgType: 0}
 }
 
 func (game *Game) CheckWins(tick *Tick) {

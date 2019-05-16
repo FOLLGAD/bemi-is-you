@@ -245,7 +245,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Number: 4,
+			Number: 6,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
@@ -291,7 +291,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  10,
 			Height: 10,
-			Number: 6,
+			Number: 7,
 			Objects: []Object{
 
 				addObject(Pos{7, 2}, Adj, "win"),
@@ -339,7 +339,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 12,
-			Number: 4,
+			Number: 8,
 			Objects: []Object{
 				addObject(Pos{2, 10}, Char, "bemi"),
 				addObject(Pos{16, 10}, Char, "sami"),
@@ -378,8 +378,8 @@ func getLevel(level int) Level {
 				addObject(Pos{11, 6}, Conj, "is"),
 
 				addObject(Pos{0, 7}, Noun, "sami"),
-				addObject(Pos{1, 7}, Conj, "is"),
-				addObject(Pos{2, 7}, Adj, "1"),
+				addObject(Pos{0, 8}, Conj, "is"),
+				addObject(Pos{0, 9}, Adj, "1"),
 
 				addObject(Pos{10, 0}, Char, "star"),
 				addObject(Pos{17, 0}, Noun, "star"),
@@ -391,12 +391,12 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 15,
-			Number: 6,
+			Number: 9,
 			Objects: []Object{
 
 				addObject(Pos{11, 8}, Adj, "win"),
 
-				addObject(Pos{10, 10}, Adj, "soup"),
+				addObject(Pos{10, 10}, Noun, "soup"),
 
 				addObject(Pos{10, 1}, Noun, "star"),
 				addObject(Pos{11, 1}, Conj, "is"),
@@ -485,7 +485,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 15,
-			Number: 6,
+			Number: 10,
 			Objects: []Object{
 
 				addObject(Pos{11, 8}, Adj, "push"),
@@ -577,7 +577,7 @@ func getLevel(level int) Level {
 		return Level{
 			Width:  18,
 			Height: 15,
-			Number: 6,
+			Number: 11,
 			Objects: []Object{
 
 				addObject(Pos{11, 3}, Adj, "push"),

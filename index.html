@@ -19,16 +19,39 @@
 			max-height: 100vh;
 		}
 
+		#session-list {
+			list-style: none;
+			padding: 0;
+		}
+
 		#canv {
 			display: flex;
 			justify-content: center;
+		}
+
+		.hide {
+			display: none;
+		}
+
+		.join-game {
+			text-decoration: underline;
+			cursor: pointer;
 		}
 	</style>
 </head>
 
 <body>
-	<div id="canv">
-
+	<div>
+		<div id="lobby">
+			<h2>Rooms</h2>
+			<ul id="session-list">
+				Loading rooms...
+			</ul>
+			<button id="session-create">Create</button>
+		</div>
+		<div class="hide" id="canv">
+			
+		</div>
 	</div>
 </body>
 

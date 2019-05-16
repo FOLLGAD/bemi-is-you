@@ -23,6 +23,7 @@ export default class Game {
 		this.playerNum = null
 	}
 	start() {
+		// Append canvas to #canv
 		document.querySelector("#canv").appendChild(this.app.view)
 
 		this.chars = new Map()
