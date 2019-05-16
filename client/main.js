@@ -34,15 +34,19 @@ function main() {
 
 		switch (e.code) {
 			case "KeyW":
+			case "ArrowUp":
 				data = "up"
 				break
 			case "KeyA":
+			case "ArrowLeft":
 				data = "left"
 				break
 			case "KeyS":
+			case "ArrowDown":
 				data = "down"
 				break
 			case "KeyD":
+			case "ArrowRight":
 				data = "right"
 				break
 			case "KeyZ":
