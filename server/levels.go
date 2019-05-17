@@ -728,3 +728,7 @@ func newId() Id {
 	idCounter++
 	return oldId
 }
+
+func parseLevel(name string) {
+
+}
