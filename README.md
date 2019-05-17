@@ -7,11 +7,12 @@
 - Javascript & HTML
 - [pixi.js](https://github.com/pixijs/pixi.js) graphics library
 - Websocket js-API
+- Webpack för att bygga
 
 ### Backend
 
 - Golang webserver
-- Förmedla karaktärers positioner samt level-info över [Websockets](https://github.com/gorilla/websocket)
+- Förmedlar karaktärers positioner samt level-info över [Websockets](https://github.com/gorilla/websocket)
 
 ## Gameplay
 
@@ -41,7 +42,3 @@ WASD - Movement
 Z - Undo
 
 R - Restart
-
-## Network package
-
-The golang server sends
