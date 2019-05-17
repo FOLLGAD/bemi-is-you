@@ -21,8 +21,14 @@ export default class Game {
 			backgroundColor: 0xeeeeee,
 		})
 		this.playerNum = null
+		this.running = false
+
+		console.log("Constructing")
+		this.chars = new Map()
 	}
 	start() {
+		console.log("Starting")
+		this.running = true
 		// Append canvas to #canv
 		document.querySelector("#canv").appendChild(this.app.view)
 
@@ -43,13 +49,6 @@ export default class Game {
 		this.container.filters = [new DropShadowFilter({ distance: 5, color: 0x0, alpha: 0.3, blur: 50, pixelSize: 1 / 16 })]
 
 		this.app.stage.addChild(container)
-
-		this.level.objects.forEach(ob => {
-			this.setChar(ob)
-		})
-		this.container.sortChildren()
-
-		this.app.renderer.resize(TILE_SIZE * this.level.width, TILE_SIZE * this.level.height);
 	}
 	setChar(char) {
 		const texture = PIXI.Texture.from('../textures/' + this.getTexture(char))
@@ -100,8 +99,17 @@ export default class Game {
 		this.chars.delete(characterId)
 	}
 	setLevel(data) {
-		console.log(data)
+		this.chars.forEach(c => c.destroy())
+		this.chars = new Map()
+
 		this.level = new Level(data)
+
+		this.level.objects.forEach(ob => {
+			this.setChar(ob)
+		})
+		this.container.sortChildren()
+
+		this.app.renderer.resize(TILE_SIZE * this.level.width, TILE_SIZE * this.level.height)
 	}
 	listen(elem, func) {
 		elem.addEventListener('keydown', func)

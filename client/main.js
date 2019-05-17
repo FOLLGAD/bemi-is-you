@@ -86,11 +86,13 @@ function instantiateGame(ws) {
 
 		switch (data.msgType) {
 			case 0: // Level info
+				if (!game.running) {
+					game.start()
+				}
 				game.setLevel(data.data)
 				if (data.room) {
 					setRoomHash(data.room)
 				}
-				game.start()
 				break
 			case 1: // Delta info
 				game.deltaTick(data.data)
