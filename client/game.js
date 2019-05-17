@@ -46,7 +46,7 @@ export default class Game {
 		container.y = 0
 
 		// Add a dropshadow effect
-		this.container.filters = [new DropShadowFilter({ distance: 5, color: 0x0, alpha: 0.3, blur: 50, pixelSize: 1 / 16 })]
+		this.container.filters = [new DropShadowFilter({ distance: 5, color: 0x0, alpha: 0.3, blur: 50/16, pixelSize: 1, quality: 2.5 })]
 
 		this.app.stage.addChild(container)
 	}
@@ -99,6 +99,7 @@ export default class Game {
 		this.chars.delete(characterId)
 	}
 	setLevel(data) {
+		console.log("Setting new level...")
 		this.chars.forEach(c => c.destroy())
 		this.chars = new Map()
 
