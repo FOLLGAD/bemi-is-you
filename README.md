@@ -42,3 +42,7 @@ WASD - Movement
 Z - Undo
 
 R - Restart
+
+## Level building
+
+Using the [Tiled](https://thorbjorn.itch.io/tiled) JSON format.
