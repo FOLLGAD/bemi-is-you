@@ -1,6 +1,55 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"regexp"
+)
+
+type tiledTile struct {
+	Id    int    `json:"id"`
+	Image string `json:"image"`
+}
+type tiledTileSet struct {
+	Tiles []tiledTile `json:"tiles"`
+}
+
+type tiledLayer struct {
+	Data   []int `json:"data"`
+	Height int   `json:"height"`
+	Width  int   `json:"width"`
+	X      int   `json:"x"`
+	Y      int   `json:"y"`
+}
+
+type tiledLevel struct {
+	Layers []tiledLayer `json:"layers"`
+	Height int          `json:"height"`
+	Width  int          `json:"width"`
+}
+
+var tileset tiledTileSet
+
+func loadTileSet() {
+	jsonFile, err := os.Open("../maps/bemi-is-you-tileset.json")
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer jsonFile.Close()
+
+	jsonByte, err2 := ioutil.ReadAll(jsonFile)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+
+	tileset = tiledTileSet{}
+
+	json.Unmarshal(jsonByte, &tileset)
+}
 
 func getLevel(level int) Level {
 	if level == 0 {
@@ -683,6 +732,8 @@ func getLevel(level int) Level {
 				addObject(Pos{12, 9}, Char, "sami"),
 			},
 		}
+	} else if level == 12 {
+		return parseLevel("broment", 12)
 	}
 
 	//default level for testing and what not
@@ -729,6 +780,69 @@ func newId() Id {
 	return oldId
 }
 
-func parseLevel(name string) {
+func parseLevel(name string, number int) Level {
+	jsonFile, err := os.Open("../maps/" + name + ".json")
 
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer jsonFile.Close()
+
+	jsonByte, err2 := ioutil.ReadAll(jsonFile)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+
+	tLevel := tiledLevel{}
+
+	nameRegexp := regexp.MustCompile(`([^\/]+)\.png`)
+	isBlockRegexp := regexp.MustCompile(`_block$`)
+
+	json.Unmarshal(jsonByte, &tLevel)
+
+	level := Level{
+		Height: tLevel.Height,
+		Width:  tLevel.Width,
+		Number: number,
+	}
+
+	for _, layer := range tLevel.Layers {
+		for i, v := range layer.Data {
+			if v > 0 {
+				tile := ""
+				for _, e := range tileset.Tiles {
+					if e.Id == v-1 {
+						tile = e.Image
+						break
+					}
+				}
+				tileImage := nameRegexp.Find([]byte(tile))
+				item := tileImage[:len(tileImage)-4]
+				itemStr := string(item)
+
+				kind := Noun
+				if itemStr == "is" {
+					kind = Conj
+				} else if isBlockRegexp.Match(item) {
+					kind = Char
+					itemStr = itemStr[:len(itemStr)-6]
+				} else {
+					adjectives := []string{"1", "2", "push", "stop", "defeat", "win"}
+					for _, e := range adjectives {
+						if e == itemStr {
+							kind = Adj
+							break
+						}
+					}
+				}
+				fmt.Println(itemStr)
+
+				pos := Pos{i%layer.Width + layer.X, i/layer.Width + layer.Y}
+				level.Objects = append(level.Objects, addObject(pos, kind, itemStr))
+			}
+		}
+	}
+
+	return level
 }

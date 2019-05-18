@@ -44,6 +44,8 @@ var upgrader = websocket.Upgrader{
 var idCounter Id = 0
 
 func main() {
+	loadTileSet()
+
 	rand.Seed(time.Now().UnixNano())
 
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
@@ -154,7 +156,7 @@ func createSession() (session Session) {
 		}
 	}()
 
-	game := MakeGame(getLevel(0), updateChan)
+	game := MakeGame(getLevel(12), updateChan)
 
 	// Generate a random room number, and make sure it's unique
 	var roomNum int32
