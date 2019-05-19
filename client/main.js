@@ -1,6 +1,6 @@
 import Game from "./game";
 
-const serverUrl = "localhost:8081"
+const serverUrl = window.location.host
 
 document.addEventListener("DOMContentLoaded", main) // Call main func on dom ready
 
