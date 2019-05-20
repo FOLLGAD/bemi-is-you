@@ -16,7 +16,9 @@
 
 ## Gameplay
 
-You and your friend play together through different levels online. Text blocks build up the logic of the levels which you can move and affect in different ways in order to proceed to the next level. 
+You and your friend play together through different levels online. Text blocks build up the logic of the levels which you can move and affect in different ways in order to proceed to the next level.
+
+![Gameplay](./readme_pics/gameplay.gif)
 
 ## Game mechanics
 
