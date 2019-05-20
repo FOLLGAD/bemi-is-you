@@ -1,4 +1,4 @@
-# bemi-is-you
+# Bemi and Sami
 
 ## Technologies
 
