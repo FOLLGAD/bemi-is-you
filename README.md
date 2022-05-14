@@ -1,5 +1,16 @@
 # Bemi and Sami
 
+## How to run
+
+Build the Go project and run the binary
+
+```bash
+$ go build
+
+$ ./bemi
+```
+Then go to `http://localhost:8123`
+
 ## Technologies
 
 ### Frontend
@@ -48,3 +59,4 @@ R - Restart
 ## Level building
 
 Using the [Tiled](https://thorbjorn.itch.io/tiled) JSON format.
+
