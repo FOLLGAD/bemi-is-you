@@ -95,7 +95,10 @@ func main() {
 
 func (session Session) join(w http.ResponseWriter, r *http.Request) {
 	// Websocket logic
-	conn, _ := upgrader.Upgrade(w, r, nil)
+	conn, err := upgrader.Upgrade(w, r, nil)
+        if (err != nil) {
+          panic(err)
+        }
 
 	playerNum := 0
 
