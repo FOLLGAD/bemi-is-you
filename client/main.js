@@ -84,8 +84,7 @@ function instantiateGame(ws) {
 	let game = new Game()
 
 	function wsHandler(e) {
-		let s = e.data.slice(1, -2)
-		let data = JSON.parse(atob(s))
+		let data = JSON.parse(e.data)
 
 		switch (data.msgType) {
 			case 0: // Level info
