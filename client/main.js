@@ -1,6 +1,9 @@
 import Game from "./game";
 
 const serverUrl = window.location.host
+const wsProtocol = window.location.protocol === "https:"
+  ? "wss"
+  : "ws"
 
 document.addEventListener("DOMContentLoaded", main) // Call main func on dom ready
 
@@ -40,7 +43,7 @@ function fetchSessions() {
 	document.querySelector("#lobby").className = ""
 	document.querySelector("#canv").className = "hide"
 
-	fetch(`http://${serverUrl}/sessions`)
+	fetch(`/sessions`)
 		.then(res => res.json())
 		.then(list => {
 			let html = list.map(entry => {
@@ -56,13 +59,13 @@ function fetchSessions() {
 
 function createGame() {
 	console.log("Creating")
-	let ws = new WebSocket(`ws://${serverUrl}/create`)
+	let ws = new WebSocket(`${wsProtocol}://${serverUrl}/create`)
 	instantiateGame(ws)
 }
 
 function joinGame(roomNum) {
 	console.log("Joining", roomNum)
-	let ws = new WebSocket(`ws://${serverUrl}/join?room=${roomNum}`)
+	let ws = new WebSocket(`${wsProtocol}://${serverUrl}/join?room=${roomNum}`)
 	instantiateGame(ws)
 }
 

@@ -90,14 +90,12 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, r.URL.Path[1:])
 	})
-	log.Fatal(http.ListenAndServe(":80", nil))
+	log.Fatal(http.ListenAndServe(":8123", nil))
 }
 
 func (session Session) join(w http.ResponseWriter, r *http.Request) {
 	// Websocket logic
 	conn, _ := upgrader.Upgrade(w, r, nil)
-
-	js, _ := json.Marshal(Message{session.game, 0, session.room})
 
 	playerNum := 0
 
@@ -109,14 +107,13 @@ func (session Session) join(w http.ResponseWriter, r *http.Request) {
 		}
 		i++
 	}
-	playerjson, _ := json.Marshal(Message{playerNum, 2, session.room})
-	conn.WriteJSON(playerjson)
+	conn.WriteJSON(&Message{playerNum, 2, session.room})
 
 	newPlayer := Player{playerNum, conn}
 	session.players[playerNum] = newPlayer
 	fmt.Println("New player", newPlayer.number)
 
-	conn.WriteJSON(js)
+	conn.WriteJSON(&Message{session.game, 0, session.room})
 	go func() {
 		for {
 			_, p, err := conn.ReadMessage()
@@ -153,9 +150,8 @@ func createSession() (session Session) {
 		// Read incoming tick updates and them broadcast to all players
 		for {
 			message := <-updateChan
-			js, _ := json.Marshal(message)
 			for _, p := range session.players {
-				p.conn.WriteJSON(js)
+				p.conn.WriteJSON(&message)
 			}
 		}
 	}()
