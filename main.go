@@ -97,7 +97,8 @@ func (session Session) join(w http.ResponseWriter, r *http.Request) {
 	// Websocket logic
 	conn, err := upgrader.Upgrade(w, r, nil)
         if (err != nil) {
-          panic(err)
+          fmt.Println(err)
+          return
         }
 
 	playerNum := 0
