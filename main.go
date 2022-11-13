@@ -87,9 +87,7 @@ func main() {
 		session := createSession()
 		session.join(w, r)
 	})
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, r.URL.Path[1:])
-	})
+	http.Handle("/", http.FileServer(http.Dir("./static")))
 	log.Fatal(http.ListenAndServe(":8123", nil))
 }
 
