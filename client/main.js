@@ -49,6 +49,7 @@ function fetchSessions() {
 			let html = list.map(entry => {
 				return `<li>Room ${entry.room} (${entry.players} playing) <a class="join-game" data-room="${entry.room}">Join</a></li>`
 			})
+			if (!html.length) html = "<p>No rooms available. Create one to get started!</p>"
 			document.querySelector("#session-list").innerHTML = html
 		})
 		.catch(() => {
