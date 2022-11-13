@@ -37,12 +37,16 @@
 			text-decoration: underline;
 			cursor: pointer;
 		}
+		.container {
+			max-width: 864px;
+			margin: 1rem auto;
+		}
 	</style>
 </head>
 
 <body>
 	<div>
-		<div id="lobby">
+		<div id="container lobby">
 			<h1>Bemi is You</h1>
 			<h2>Rooms</h2>
 			<ul id="session-list">
@@ -50,19 +54,19 @@
 			</ul>
 			<button id="session-create">Create</button>
 		</div>
-		<div class="hide" id="canv">
-			
-		</div>
-		<div class="controls" style="max-width: 1060px; margin: 1rem auto">
+
+		<div class="hide" id="canv"></div>
+
+		<div class="container controls">
 			<h2>Instructions</h2>
 			<p>
 				The blocks on the game map control the game mechanics. Example: BEMI IS YOU means you (the player) control Bemi. WALL IS STOP means Wall blocks become solid.
 			</p>
 
 			<p>
-				WASD — Move up/left/down/right
+				WASD – Move up/left/down/right
 				<br />
-				R — Restart level
+				R – Restart level
 			</p>
 		</div>
 	</div>
