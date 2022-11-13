@@ -115,6 +115,12 @@ func (game *Game) SetLevel(level Level) {
 
 func (game *Game) ReceiveData(msg ReceivedMessage) {
 	meanings := findSentences(game.ObjectState)
+	
+	isSpectator := msg.player > 2
+	
+	if isSpectator {
+		return
+	}
 
 	var tick Tick
 	var delta Pos
